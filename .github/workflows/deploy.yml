@@ -25,7 +25,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'npm'
 
       - name: Install dependencies
@@ -35,10 +35,9 @@ jobs:
         run: npm test
 
       - name: Build Vite demo
-        run: npm run build
+        run: npm run build:demo
         env:
-          # Sets the base path for GitHub Pages deployment.
-          # Update to match your repository name, e.g. /drupal-web-components/
+          # Sets the asset base path. Update to match your repository name.
           BASE_URL: /drupal-web-components/
 
       - name: Build Storybook
@@ -48,7 +47,7 @@ jobs:
         run: |
           mkdir -p pages
           # Vite demo at root
-          cp -r dist/* pages/
+          cp -r demo-dist/* pages/
           # Storybook under /storybook/
           mkdir pages/storybook
           cp -r storybook-static/* pages/storybook/

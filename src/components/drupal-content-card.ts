@@ -1,4 +1,4 @@
-import { LitElement, html, css, nothing } from 'lit';
+import { LitElement, css, html, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { ContentItem } from '../types/jsonapi.js';
 
@@ -58,7 +58,9 @@ export class DrupalContentCard extends LitElement {
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .card { transition: none; }
+      .card {
+        transition: none;
+      }
     }
 
     .card:hover {
@@ -141,7 +143,9 @@ export class DrupalContentCard extends LitElement {
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .card__link { transition: none; }
+      .card__link {
+        transition: none;
+      }
     }
 
     .card__link:hover {
@@ -172,8 +176,10 @@ export class DrupalContentCard extends LitElement {
 
   @property({ type: Object }) item: ContentItem | null = null;
   @property() href = '';
-  @property({ attribute: 'heading-level' }) headingLevel: 'h2' | 'h3' | 'h4' = 'h2';
-  @property({ attribute: 'image-loading' }) imageLoading: 'lazy' | 'eager' = 'lazy';
+  @property({ attribute: 'heading-level' }) headingLevel: 'h2' | 'h3' | 'h4' =
+    'h2';
+  @property({ attribute: 'image-loading' }) imageLoading: 'lazy' | 'eager' =
+    'lazy';
 
   private _handleClick(e: MouseEvent) {
     if (!this.item) return;
@@ -193,8 +199,10 @@ export class DrupalContentCard extends LitElement {
   }
 
   private _renderHeading(title: string) {
-    if (this.headingLevel === 'h4') return html`<h4 class="card__title" part="title">${title}</h4>`;
-    if (this.headingLevel === 'h3') return html`<h3 class="card__title" part="title">${title}</h3>`;
+    if (this.headingLevel === 'h4')
+      return html`<h4 class="card__title" part="title">${title}</h4>`;
+    if (this.headingLevel === 'h3')
+      return html`<h3 class="card__title" part="title">${title}</h3>`;
     return html`<h2 class="card__title" part="title">${title}</h2>`;
   }
 
@@ -204,33 +212,55 @@ export class DrupalContentCard extends LitElement {
 
     const linkHref = this.href || item.url;
     const arrowIcon = html`
-      <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-        <path d="M8 1L15 8L8 15M15 8H1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <svg
+        aria-hidden="true"
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="currentColor"
+      >
+        <path
+          d="M8 1L15 8L8 15M15 8H1"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          fill="none"
+        />
       </svg>
     `;
 
     const placeholderIcon = html`
-      <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <rect x="3" y="3" width="18" height="18" rx="2"/>
-        <circle cx="8.5" cy="8.5" r="1.5"/>
-        <path d="M21 15l-5-5L5 21"/>
+      <svg
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+      >
+        <rect x="3" y="3" width="18" height="18" rx="2" />
+        <circle cx="8.5" cy="8.5" r="1.5" />
+        <path d="M21 15l-5-5L5 21" />
       </svg>
     `;
 
     return html`
       <article class="card" part="card">
         <div class="card__image-wrap" part="image-wrap">
-          ${item.imageUrl
-            ? html`<img
-                class="card__image"
-                part="image"
-                src=${item.imageUrl}
-                alt=${item.imageAlt}
-                loading=${this.imageLoading}
-                width="800"
-                height="450"
-              />`
-            : html`<div class="card__image-placeholder" role="presentation">${placeholderIcon}</div>`}
+          ${item.imageUrl ?
+            html`<img
+              class="card__image"
+              part="image"
+              src=${item.imageUrl}
+              alt=${item.imageAlt}
+              loading=${this.imageLoading}
+              width="800"
+              height="450"
+            />`
+          : html`<div class="card__image-placeholder" role="presentation">
+              ${placeholderIcon}
+            </div>`}
         </div>
         <div class="card__body" part="body">
           ${this._renderHeading(item.title)}
@@ -244,9 +274,7 @@ export class DrupalContentCard extends LitElement {
               href=${linkHref}
               @click=${this._handleClick}
             >
-              Read more
-              <span class="visually-hidden"> about ${item.title}</span>
-              ${arrowIcon}
+              Read more about ${item.title} ${arrowIcon}
             </a>
             <slot name="footer"></slot>
           </footer>

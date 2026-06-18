@@ -89,6 +89,17 @@ export class DrupalContentList extends LitElement {
         repeat(auto-fill, minmax(var(--dwc-list-min-col, 18rem), 1fr))
       );
       gap: var(--dwc-list-gap, 1.5rem);
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .list__grid > li {
+      display: flex;
+    }
+
+    .list__grid > li > drupal-content-card {
+      flex: 1;
     }
   `;
 
