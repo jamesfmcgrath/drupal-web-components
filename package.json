@@ -1,0 +1,50 @@
+{
+  "name": "drupal-web-components",
+  "version": "1.0.0",
+  "description": "Native Web Components (Lit + TypeScript) for rendering Drupal JSON:API content",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build -o storybook-static",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src --ext .ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "lit": "^3.2.0"
+  },
+  "devDependencies": {
+    "@chromatic-com/storybook": "^3.2.2",
+    "@custom-elements-manifest/analyzer": "^0.10.3",
+    "@open-wc/testing": "^4.0.0",
+    "@storybook/addon-a11y": "^8.3.6",
+    "@storybook/addon-essentials": "^8.3.6",
+    "@storybook/blocks": "^8.3.6",
+    "@storybook/test": "^8.3.6",
+    "@storybook/web-components": "^8.3.6",
+    "@storybook/web-components-vite": "^8.3.6",
+    "@typescript-eslint/eslint-plugin": "^8.3.0",
+    "@typescript-eslint/parser": "^8.3.0",
+    "@vitest/coverage-v8": "^2.1.1",
+    "eslint": "^9.9.1",
+    "jsdom": "^25.0.0",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.2",
+    "vitest": "^2.1.1"
+  },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": "./dist/drupal-web-components.js",
+    "./drupal-content-card": "./dist/components/drupal-content-card.js",
+    "./drupal-content-list": "./dist/components/drupal-content-list.js",
+    "./drupal-content-search": "./dist/components/drupal-content-search.js",
+    "./ui-accordion": "./dist/components/ui-accordion.js"
+  }
+}

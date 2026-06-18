@@ -1,0 +1,7 @@
+node_modules/
+dist/
+storybook-static/
+pages/
+coverage/
+.DS_Store
+*.local

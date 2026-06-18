@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Drupal Web Components — native Web Components for rendering Drupal JSON:API content." />
+    <title>Drupal Web Components — Live Demo</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <style>
+      /* Base tokens — override these to retheme everything */
+      :root {
+        --color-primary: #0057a8;
+        --color-primary-dark: #003f7d;
+        --color-accent: #f4a100;
+        --color-text: #1a1a2e;
+        --color-muted: #555;
+        --color-bg: #f8f9fa;
+        --color-surface: #ffffff;
+        --font-sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+        --radius: 0.5rem;
+        --shadow: 0 1px 4px rgb(0 0 0 / 0.1);
+
+        /* Web Component tokens */
+        --dwc-card-bg: var(--color-surface);
+        --dwc-card-link-bg: var(--color-primary);
+        --dwc-card-link-bg-hover: var(--color-primary-dark);
+        --dwc-card-focus-ring: 3px solid var(--color-accent);
+        --dwc-search-focus-ring: 3px solid var(--color-accent);
+        --dwc-search-btn-bg: var(--color-primary);
+        --dwc-accordion-focus-ring: 3px solid var(--color-accent);
+        --dwc-accordion-icon-color: var(--color-primary);
+        --dwc-list-min-col: 20rem;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --color-text: #e0e0e0;
+          --color-muted: #a0a0b0;
+          --color-bg: #12131f;
+          --color-surface: #1e2030;
+          --shadow: 0 1px 4px rgb(0 0 0 / 0.4);
+          --dwc-card-bg: #1e2030;
+          --dwc-card-title-color: #e8e8f0;
+          --dwc-card-summary-color: #a0a0b0;
+        }
+      }
+
+      *, *::before, *::after { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: var(--font-sans);
+        background: var(--color-bg);
+        color: var(--color-text);
+        line-height: 1.6;
+      }
+
+      a { color: var(--color-primary); }
+
+      /* ── Layout ── */
+      .site-header {
+        background: var(--color-primary);
+        color: #fff;
+        padding: 1.5rem 2rem;
+      }
+
+      .site-header h1 {
+        margin: 0;
+        font-size: clamp(1.5rem, 4vw, 2.25rem);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .site-header p {
+        margin: 0.375rem 0 0;
+        opacity: 0.85;
+        font-size: 1rem;
+      }
+
+      .site-header .badge {
+        display: inline-block;
+        margin-top: 0.75rem;
+        padding: 0.2em 0.6em;
+        font-size: 0.75rem;
+        font-weight: 600;
+        background: rgba(255 255 255 / 0.2);
+        border-radius: 2em;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      main {
+        max-width: 72rem;
+        margin: 0 auto;
+        padding: 2rem 1.5rem 4rem;
+      }
+
+      section {
+        margin-bottom: 3.5rem;
+      }
+
+      .section-heading {
+        font-size: 1.375rem;
+        font-weight: 700;
+        margin: 0 0 0.25rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--color-primary);
+        display: inline-block;
+      }
+
+      .section-intro {
+        margin: 0.5rem 0 1.5rem;
+        color: var(--color-muted);
+        max-width: 50rem;
+      }
+
+      .search-row {
+        max-width: 36rem;
+        margin-bottom: 2rem;
+      }
+
+      /* ── Tech badges ── */
+      .tech-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        list-style: none;
+        margin: 1rem 0 0;
+        padding: 0;
+      }
+
+      .tech-list li {
+        padding: 0.25em 0.75em;
+        border-radius: 2em;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        background: rgba(0 87 168 / 0.1);
+        color: var(--color-primary);
+        border: 1px solid rgba(0 87 168 / 0.25);
+      }
+
+      /* ── Footer ── */
+      .site-footer {
+        text-align: center;
+        padding: 1.5rem;
+        font-size: 0.875rem;
+        color: var(--color-muted);
+        border-top: 1px solid rgba(0 0 0 / 0.08);
+      }
+
+      .site-footer a { color: inherit; }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <h1>Drupal Web Components</h1>
+      <p>Native Web Components (Lit + TypeScript) for rendering Drupal JSON:API content</p>
+      <span class="badge">Portfolio demo · mock data</span>
+    </header>
+
+    <main>
+
+      <!-- ── Search + List section ── -->
+      <section aria-labelledby="content-heading">
+        <h2 class="section-heading" id="content-heading">Content Listing</h2>
+        <p class="section-intro">
+          <code>&lt;drupal-content-search&gt;</code> + <code>&lt;drupal-content-list&gt;</code>
+          wired together. The list fetches from a configurable JSON:API endpoint (mock data here).
+          Type to filter client-side; the result count is announced to screen readers via
+          <code>aria-live</code>.
+        </p>
+
+        <div class="search-row">
+          <drupal-content-search
+            list-id="articles"
+            label="Search articles"
+            placeholder="e.g. JSON:API, accessibility…"
+          ></drupal-content-search>
+        </div>
+
+        <drupal-content-list
+          id="articles"
+          use-mock
+          heading-level="h3"
+        ></drupal-content-list>
+      </section>
+
+      <!-- ── Standalone card section ── -->
+      <section aria-labelledby="card-heading">
+        <h2 class="section-heading" id="card-heading">Content Card (standalone)</h2>
+        <p class="section-intro">
+          <code>&lt;drupal-content-card&gt;</code> accepts a <code>ContentItem</code> object and
+          renders with full Shadow DOM encapsulation. Slots let you inject arbitrary content.
+        </p>
+
+        <div style="max-width: 22rem;">
+          <drupal-content-card id="demo-card" heading-level="h3">
+            <span slot="footer" style="font-size:0.8rem;color:#666">✓ Published 15 March 2024</span>
+          </drupal-content-card>
+        </div>
+      </section>
+
+      <!-- ── Accordion section ── -->
+      <section aria-labelledby="accordion-heading">
+        <h2 class="section-heading" id="accordion-heading">Accessible Accordion</h2>
+        <p class="section-intro">
+          <code>&lt;ui-accordion&gt;</code> is built entirely from scratch — no third-party
+          dependencies. It implements the
+          <a href="https://www.w3.org/WAI/ARIA/apg/patterns/accordion/" rel="noopener">
+            WAI-ARIA Accordion pattern
+          </a>:
+          correct <code>aria-expanded</code>, <code>aria-controls</code>, and keyboard navigation
+          (↑↓ Home End).
+        </p>
+
+        <div style="max-width: 48rem;">
+          <ui-accordion>
+            <ui-accordion-item heading="What is Drupal JSON:API?">
+              <p>
+                The JSON:API module ships with Drupal 8.7+ core. It exposes every entity type
+                as a standards-compliant REST API with consistent URLs, filtering, sparse
+                fieldsets, and includes — no custom endpoint code required.
+              </p>
+            </ui-accordion-item>
+            <ui-accordion-item heading="Why native Web Components instead of React?" open>
+              <p>
+                Web Components run in every modern browser without a framework runtime. For a
+                Drupal-rendered page, that means <strong>zero JavaScript tax</strong> on the host
+                theme — just drop in a <code>&lt;script type="module"&gt;</code> tag and use the
+                element. They compose with any CMS, server-rendered or otherwise.
+              </p>
+            </ui-accordion-item>
+            <ui-accordion-item heading="How do I point these at a real Drupal site?">
+              <p>
+                Set the <code>endpoint</code> attribute on <code>&lt;drupal-content-list&gt;</code>
+                to your Drupal JSON:API URL and remove <code>use-mock</code>:
+              </p>
+              <pre style="background:#f5f5f5;padding:0.75rem;border-radius:0.375rem;overflow:auto;font-size:0.875rem"><code>&lt;drupal-content-list
+  endpoint="https://your-site.example/jsonapi/node/article"
+  base-url="https://your-site.example"
+&gt;&lt;/drupal-content-list&gt;</code></pre>
+              <p>
+                You may need to configure CORS in <code>services.yml</code> to allow requests
+                from your front-end origin. See the README for full details.
+              </p>
+            </ui-accordion-item>
+            <ui-accordion-item heading="Accessibility commitments">
+              <p>All components target <strong>WCAG 2.1 AA</strong>:</p>
+              <ul>
+                <li>Semantic HTML with correct ARIA roles and states</li>
+                <li>Visible focus indicators (3 px accent ring)</li>
+                <li>Keyboard-navigable without a mouse</li>
+                <li><code>aria-live</code> regions for async content announcements</li>
+                <li><code>prefers-reduced-motion</code> respected on all transitions</li>
+                <li>Light/dark colour schemes via CSS custom properties</li>
+              </ul>
+            </ui-accordion-item>
+          </ui-accordion>
+        </div>
+      </section>
+
+      <!-- ── Tech stack callout ── -->
+      <section aria-labelledby="tech-heading">
+        <h2 class="section-heading" id="tech-heading">Tech Stack</h2>
+        <ul class="tech-list" aria-label="Technologies used">
+          <li>Lit 3</li>
+          <li>TypeScript</li>
+          <li>Vite</li>
+          <li>Storybook 8</li>
+          <li>Vitest</li>
+          <li>@open-wc/testing</li>
+          <li>GitHub Actions</li>
+          <li>WCAG 2.1 AA</li>
+        </ul>
+      </section>
+
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        <a href="https://github.com/jfm-digital/drupal-web-components">GitHub</a> ·
+        MIT licence · Built with Lit + TypeScript
+      </p>
+    </footer>
+
+    <script type="module" src="/src/index.ts"></script>
+    <script type="module">
+      // Wire up the standalone demo card with a ContentItem object
+      import { mockArticlesResponse } from '/src/data/mock.ts';
+      import { normaliseJsonApiResponse } from '/src/data/normalise.ts';
+
+      const items = normaliseJsonApiResponse(mockArticlesResponse);
+      const card = document.getElementById('demo-card');
+      if (card) card.item = items[0];
+    </script>
+  </body>
+</html>

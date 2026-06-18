@@ -1,0 +1,72 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Only one concurrent deployment
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build demo + Storybook
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build Vite demo
+        run: npm run build
+        env:
+          # Sets the base path for GitHub Pages deployment.
+          # Update to match your repository name, e.g. /drupal-web-components/
+          BASE_URL: /drupal-web-components/
+
+      - name: Build Storybook
+        run: npm run build-storybook
+
+      - name: Assemble Pages artefact
+        run: |
+          mkdir -p pages
+          # Vite demo at root
+          cp -r dist/* pages/
+          # Storybook under /storybook/
+          mkdir pages/storybook
+          cp -r storybook-static/* pages/storybook/
+
+      - name: Upload Pages artefact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: pages
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
