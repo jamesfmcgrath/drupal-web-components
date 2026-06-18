@@ -79,6 +79,12 @@ export class DrupalContentSearch extends LitElement {
       min-width: 0;
     }
 
+    /* Browser default placeholder is typically rgba(0,0,0,0.54) ≈ 3.5:1 — fails AA.
+       #6b6b6b gives ~5.3:1 on white. */
+    .search__input::placeholder {
+      color: #6b6b6b;
+    }
+
     .search__clear {
       display: none;
       align-items: center;
@@ -130,6 +136,10 @@ export class DrupalContentSearch extends LitElement {
       }
       :host(:not([theme])) .search__input {
         color: #e0e0e0;
+      }
+      /* #9a9ab0 on #1e2030 ≈ 4.7:1 — passes AA */
+      :host(:not([theme])) .search__input::placeholder {
+        color: #9a9ab0;
       }
       :host(:not([theme])) .search__clear {
         color: #a0a0b0;

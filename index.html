@@ -16,6 +16,9 @@
         --color-muted: #555;
         --color-bg: #f8f9fa;
         --color-surface: #ffffff;
+        /* Separate link-text colour so buttons (white text on primary bg) and
+           text links can diverge in dark mode without breaking each other. */
+        --color-link: var(--color-primary);
         --font-sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
         --radius: 0.5rem;
         --shadow: 0 1px 4px rgb(0 0 0 / 0.1);
@@ -42,6 +45,9 @@
           --dwc-card-bg: #1e2030;
           --dwc-card-title-color: #e8e8f0;
           --dwc-card-summary-color: #a0a0b0;
+          /* Lighter blue for text links on dark bg: #5ba3e0 gives ~7.2:1 on #12131f.
+             Button backgrounds keep --color-primary (#0057a8) via their own tokens. */
+          --color-link: #5ba3e0;
         }
       }
 
@@ -55,7 +61,7 @@
         line-height: 1.6;
       }
 
-      a { color: var(--color-primary); }
+      a { color: var(--color-link); }
 
       /* ── Layout ── */
       .site-header {
@@ -73,7 +79,9 @@
 
       .site-header p {
         margin: 0.375rem 0 0;
-        opacity: 0.85;
+        /* Explicit colour instead of opacity so axe computes contrast correctly.
+           rgba(255 255 255 / 0.88) on #0057a8 ≈ 5.5:1 — passes AA. */
+        color: rgba(255 255 255 / 0.88);
         font-size: 1rem;
       }
 
@@ -83,7 +91,9 @@
         padding: 0.2em 0.6em;
         font-size: 0.75rem;
         font-weight: 600;
-        background: rgba(255 255 255 / 0.2);
+        /* rgba(0 0 0 / 0.25) over #0057a8 ≈ #004183 — white text gives ~9:1. */
+        background: rgba(0 0 0 / 0.25);
+        color: #fff;
         border-radius: 2em;
         letter-spacing: 0.04em;
         text-transform: uppercase;
@@ -135,7 +145,7 @@
         font-size: 0.8125rem;
         font-weight: 600;
         background: rgba(0 87 168 / 0.1);
-        color: var(--color-primary);
+        color: var(--color-link);
         border: 1px solid rgba(0 87 168 / 0.25);
       }
 
@@ -149,16 +159,37 @@
       }
 
       .site-footer a { color: inherit; }
+
+      /* ── Skip link ── */
+      .skip-link {
+        position: absolute;
+        top: -9999px;
+        left: 1rem;
+        padding: 0.625rem 1.25rem;
+        background: #fff;
+        color: #0057a8;
+        font-weight: 700;
+        font-size: 0.9375rem;
+        text-decoration: none;
+        border: 3px solid #0057a8;
+        border-radius: 0 0 0.375rem 0.375rem;
+        z-index: 9999;
+      }
+
+      .skip-link:focus {
+        top: 0;
+      }
     </style>
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
     <header class="site-header">
       <h1>Drupal Web Components</h1>
       <p>Native Web Components (Lit + TypeScript) for rendering Drupal JSON:API content</p>
       <span class="badge">Portfolio demo · mock data</span>
     </header>
 
-    <main>
+    <main id="main">
 
       <!-- ── Search + List section ── -->
       <section aria-labelledby="content-heading">
